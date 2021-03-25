@@ -1,20 +1,39 @@
 // Outrun.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
 
-#include <iostream>
+#include <SFML/Graphics.hpp>
 
-int main()
-{
-    std::cout << "Hello World!\n";
+using namespace sf;
+
+int width = 1024;
+int height = 768;
+
+void drawQuad(RenderWindow &w, Color c, int x1, int y1, int w1, int x2, int y2, int w2) {
+	ConvexShape shape(4);
+	shape.setFillColor(c);
+	shape.setPoint(0, Vector2f(x1 - w1, y1));
+	shape.setPoint(1, Vector2f(x2 - w2, y2));
+	shape.setPoint(2, Vector2f(x2 + w2, y2));
+	shape.setPoint(3, Vector2f(x1 + w1, y1));
+	w.draw(shape);
 }
 
-// Run program: Ctrl + F5 or Debug > Start Without Debugging menu
-// Debug program: F5 or Debug > Start Debugging menu
+int main () {
+	RenderWindow app(VideoMode(width, height), "Outrun Racing!");
+	app.setFramerateLimit(144);
 
-// Tips for Getting Started: 
-//   1. Use the Solution Explorer window to add/manage files
-//   2. Use the Team Explorer window to connect to source control
-//   3. Use the Output window to see build output and other messages
-//   4. Use the Error List window to view errors
-//   5. Go to Project > Add New Item to create new code files, or Project > Add Existing Item to add existing code files to the project
-//   6. In the future, to open this project again, go to File > Open > Project and select the .sln file
+	while (app.isOpen()) {
+		Event e;
+
+		while (app.pollEvent(e)) {
+			if (e.type == Event::Closed)
+				app.close();
+		}
+
+		app.clear();
+		drawQuad(app, Color::Green, 500, 500, 200, 500, 300, 100);
+		app.display();
+	}
+
+	return 0;
+}
